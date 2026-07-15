@@ -1,0 +1,43 @@
+<h1>Đăng ký</h1>
+
+<%= form_with model: @user, url: sign_up_path do |form| %>
+  <% if @user.errors.any? %>
+    <div>
+      <h2>Không thể tạo tài khoản</h2>
+
+      <ul>
+        <% @user.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :name, "Họ tên" %>
+    <%= form.text_field :name, required: true, autofocus: true %>
+  </div>
+
+  <div>
+    <%= form.label :email_address, "Email" %>
+    <%= form.email_field :email_address,
+      required: true,
+      autocomplete: "email" %>
+  </div>
+
+  <div>
+    <%= form.label :password, "Mật khẩu" %>
+    <%= form.password_field :password,
+      required: true,
+      autocomplete: "new-password" %>
+  </div>
+
+  <div>
+    <%= form.label :password_confirmation, "Xác nhận mật khẩu" %>
+    <%= form.password_field :password_confirmation,
+      required: true,
+      autocomplete: "new-password" %>
+  </div>
+
+  <%= form.submit "Tạo tài khoản" %>
+<% end %>

@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  get "home/index"
-  get "up" => "rails/health#show", as: :rails_health_check
+  get "sign_ups/show"
+  resource :session
+  resources :passwords, param: :token
+  resource :sign_up, only: %i[show create]
   root "home#index"
 end
