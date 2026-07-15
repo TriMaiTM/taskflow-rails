@@ -3,5 +3,6 @@ Rails.application.routes.draw do
   resource :session
   resources :passwords, param: :token
   resource :sign_up, only: %i[show create]
+  resources :projects
   root "home#index"
 end

@@ -1,0 +1,11 @@
+<h1><%= @project.name %></h1>
+<p><%= simple_format(@project.description) %></p>
+<p>
+  <%= link_to "Sửa", edit_project_path(@project) %>
+
+  <%= button_to "Xóa",
+    @project,
+    method: :delete,
+    data: { turbo_confirm: "Xóa dự án này?" } %>
+</p>
+<%= link_to "Danh sách dự án", projects_path %>

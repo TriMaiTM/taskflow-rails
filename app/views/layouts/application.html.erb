@@ -28,7 +28,7 @@
       <%= link_to "TaskFlow", root_path %>
 
       <% if authenticated? %>
-        <%= link_to "Dự án", projects_path if defined?(projects_path) %>
+        <%= link_to "Dự án", projects_path %>
 
       <%= button_to "Đăng xuất",
         session_path,

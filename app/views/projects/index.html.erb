@@ -1,0 +1,14 @@
+<h1>Dự án của tôi</h1>
+
+<p><%= link_to "Tạo dự án", new_project_path %></p>
+
+<% if @projects.any? %>
+  <% @projects.each do |project| %>
+    <article>
+      <h2><%= link_to project.name, project %></h2>
+      <p><%= truncate(project.description, length: 120) %></p>
+    </article>
+  <% end %>
+<% else %>
+  <p>Bạn chưa có dự án nào.</p>
+<% end %>

@@ -1,0 +1,21 @@
+<%= form_with model: project do |form| %>
+  <% if project.errors.any? %>
+    <ul>
+      <% project.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <div>
+    <%= form.label :name, "Tên dự án" %>
+    <%= form.text_field :name, required: true %>
+  </div>
+
+  <div>
+    <%= form.label :description, "Mô tả" %>
+    <%= form.text_area :description, rows: 5 %>
+  </div>
+
+  <%= form.submit %>
+<% end %>
