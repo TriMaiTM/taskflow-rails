@@ -14,14 +14,15 @@
 <p>
   <%= link_to "Tạo công việc", new_project_task_path(@project) %>
 </p>
-<%= form_with url: project_path(@project), method: :get do |form| %>
+<%= form_with url: project_path(@project), method: :get, data: { controller: "autosubmit" } do |form| %>
   <%= form.search_field :q,
     value: params[:q],
     placeholder: "Tìm công việc..." %>
   <%= form.select :status,
     [["Tất cả", ""]] +
       Task.statuses.keys.map { |status| [status.humanize, status] },
-    selected: params[:status] %>
+    { selected: params[:status] },
+    { data: { action: "change->autosubmit#submit" } }%>
   <%= form.submit "Lọc" %>
 <% end %>
 <% @tasks.each do |task| %>
