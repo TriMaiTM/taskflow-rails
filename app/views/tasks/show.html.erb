@@ -43,3 +43,21 @@
 </p>
 
 <%= link_to "Quay lại dự án", @project %>
+<hr>
+<h2>Bình luận</h2>
+<% @task.comments.includes(:user).order(created_at: :asc).each do |comment| %>
+  <article>
+    <strong><%= comment.user.name %></strong>
+    <small><%= l(comment.created_at, format: :short) %></small>
+    <%= simple_format(comment.body) %>
+    <%= button_to "Xóa",
+      project_task_comment_path(@project, @task, comment),
+      method: :delete,
+      data: { turbo_confirm: "Xóa bình luận?" } %>
+  </article>
+<% end %>
+<%= form_with model: [@project, @task, Comment.new] do |form| %>
+  <%= form.label :body, "Bình luận mới" %>
+  <%= form.text_area :body, required: true, rows: 4 %>
+  <%= form.submit "Gửi" %>
+<% end %>

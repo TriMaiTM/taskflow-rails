@@ -8,4 +8,5 @@ class User < ApplicationRecord
   validates :email_address, presence: true, uniqueness: true
   validates :password, length: { minimum: 8 }, allow_nil: true
   has_many :projects, dependent: :destroy
+  has_many :comments, dependent: :destroy
 end
