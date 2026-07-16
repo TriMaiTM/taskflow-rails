@@ -1,0 +1,37 @@
+<%= form_with model: [project, task] do |form| %>
+  <% if task.errors.any? %>
+    <ul>
+      <% task.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <div>
+    <%= form.label :title, "Tiêu đề" %>
+    <%= form.text_field :title, required: true %>
+  </div>
+
+  <div>
+    <%= form.label :description, "Mô tả" %>
+    <%= form.text_area :description, rows: 6 %>
+  </div>
+
+  <div>
+    <%= form.label :status, "Trạng thái" %>
+    <%= form.select :status,
+      Task.statuses.keys.map { |status| [status.humanize, status] } %>
+  </div>
+
+  <div>
+    <%= form.label :due_on, "Deadline" %>
+    <%= form.date_field :due_on %>
+  </div>
+
+  <div>
+    <%= form.label :files, "Tệp đính kèm" %>
+    <%= form.file_field :files, multiple: true %>
+  </div>
+
+  <%= form.submit %>
+<% end %>

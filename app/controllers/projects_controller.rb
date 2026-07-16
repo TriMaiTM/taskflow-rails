@@ -6,6 +6,15 @@ class ProjectsController < ApplicationController
     end
 
     def show
+        @tasks = @project.tasks.recent_first
+        if Task.statuses.key?(params[:status])
+            @tasks = @tasks.where(status: params[:status])
+        end
+
+        if params[:q].present?
+            keyword = Task.sanitize_sql_like(params[:q].downcase)
+            @tasks = @tasks.where("LOWER(title) LIKE ?", "%#{keyword}%")
+        end
     end
 
     def new

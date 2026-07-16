@@ -9,3 +9,36 @@
     data: { turbo_confirm: "Xóa dự án này?" } %>
 </p>
 <%= link_to "Danh sách dự án", projects_path %>
+<hr>
+<h2>Công việc</h2>
+<p>
+  <%= link_to "Tạo công việc", new_project_task_path(@project) %>
+</p>
+<%= form_with url: project_path(@project), method: :get do |form| %>
+  <%= form.search_field :q,
+    value: params[:q],
+    placeholder: "Tìm công việc..." %>
+  <%= form.select :status,
+    [["Tất cả", ""]] +
+      Task.statuses.keys.map { |status| [status.humanize, status] },
+    selected: params[:status] %>
+  <%= form.submit "Lọc" %>
+<% end %>
+<% @tasks.each do |task| %>
+  <article>
+    <h3>
+      <%= link_to task.title, [@project, task] %>
+    </h3>
+    <p>
+      <%= task.status.humanize %>
+      <% if task.overdue? %>
+        — Quá hạn
+      <% end %>
+    </p>
+    <%= button_to(
+      task.done? ? "Mở lại" : "Hoàn thành",
+      toggle_project_task_path(@project, task),
+      method: :patch
+    ) %>
+  </article>
+<% end %>

@@ -1,0 +1,45 @@
+<article>
+  <h1><%= @task.title %></h1>
+
+  <p>
+    Trạng thái:
+    <strong><%= @task.status.humanize %></strong>
+  </p>
+
+  <% if @task.due_on.present? %>
+    <p>
+      Deadline:
+      <%= l(@task.due_on) %>
+
+      <% if @task.overdue? %>
+        <strong>Quá hạn</strong>
+      <% end %>
+    </p>
+  <% end %>
+
+  <%= simple_format(@task.description) %>
+
+  <% if @task.files.attached? %>
+    <h2>Tệp đính kèm</h2>
+
+    <ul>
+      <% @task.files.each do |file| %>
+        <li>
+          <%= link_to file.filename,
+            rails_blob_path(file, disposition: "attachment") %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+</article>
+
+<p>
+  <%= link_to "Sửa", edit_project_task_path(@project, @task) %>
+
+  <%= button_to "Xóa",
+    [@project, @task],
+    method: :delete,
+    data: { turbo_confirm: "Xóa công việc này?" } %>
+</p>
+
+<%= link_to "Quay lại dự án", @project %>
