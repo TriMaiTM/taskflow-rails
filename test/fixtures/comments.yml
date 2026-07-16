@@ -1,11 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  task: one
+  task: todo
   user: one
-  body: MyText
+  body: Bình luận thứ nhất
 
 two:
-  task: two
+  task: done
   user: two
-  body: MyText
+  body: Bình luận thứ hai
