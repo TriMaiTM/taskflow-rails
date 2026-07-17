@@ -1,10 +1,483 @@
-/*
- * This is a manifest file that'll be compiled into application.css.
- *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
- */
+/* ================================
+   1. Design tokens
+   ================================ */
+
+:root {
+    --color-primary: #6366f1;
+    --color-primary-dark: #4f46e5;
+    --color-primary-light: #eef2ff;
+
+    --color-background: #f8fafc;
+    --color-surface: #ffffff;
+    --color-border: #e2e8f0;
+
+    --color-text: #0f172a;
+    --color-text-muted: #64748b;
+
+    --color-success: #16a34a;
+    --color-success-light: #f0fdf4;
+    --color-danger: #dc2626;
+    --color-danger-light: #fef2f2;
+    --color-warning: #d97706;
+
+    --radius-small: 8px;
+    --radius-medium: 12px;
+    --radius-large: 18px;
+
+    --shadow-small: 0 1px 3px rgb(15 23 42 / 8%);
+    --shadow-medium: 0 12px 30px rgb(15 23 42 / 10%);
+}
+
+/* ================================
+   2. Reset và base
+   ================================ */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    color-scheme: light;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at top left, #eef2ff, transparent 35%),
+        var(--color-background);
+    color: var(--color-text);
+    font-family:
+        Inter, ui-sans-serif, system-ui, -apple-system,
+        BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.6;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button,
+input,
+textarea,
+select {
+    font: inherit;
+}
+
+.container {
+    width: min(1120px, calc(100% - 32px));
+    margin-inline: auto;
+}
+
+.main-content {
+    padding-block: 40px 64px;
+}
+
+/* ================================
+   3. Navbar
+   ================================ */
+
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border-bottom: 1px solid rgb(226 232 240 / 80%);
+    background: rgb(255 255 255 / 85%);
+    backdrop-filter: blur(14px);
+}
+
+.navbar__inner {
+    display: flex;
+    min-height: 72px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1rem;
+    font-weight: 800;
+}
+
+.brand__logo {
+    display: grid;
+    width: 38px;
+    height: 38px;
+    place-items: center;
+    border-radius: 11px;
+    background: linear-gradient(135deg,
+            var(--color-primary),
+            #8b5cf6);
+    color: white;
+    box-shadow: 0 8px 18px rgb(99 102 241 / 25%);
+}
+
+.navbar__links {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.navbar__links form {
+    margin: 0;
+}
+
+.navbar__user {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+}
+
+.nav-link {
+    color: var(--color-text-muted);
+    font-weight: 600;
+}
+
+.nav-link:hover {
+    color: var(--color-primary);
+}
+
+/* ================================
+   4. Buttons
+   ================================ */
+
+.button {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border: 1px solid transparent;
+    border-radius: var(--radius-small);
+    cursor: pointer;
+    font-weight: 700;
+    transition:
+        transform 150ms ease,
+        background-color 150ms ease,
+        border-color 150ms ease,
+        box-shadow 150ms ease;
+}
+
+.button:hover {
+    transform: translateY(-1px);
+}
+
+.button--primary {
+    background: var(--color-primary);
+    color: white;
+    box-shadow: 0 8px 18px rgb(99 102 241 / 22%);
+}
+
+.button--primary:hover {
+    background: var(--color-primary-dark);
+}
+
+.button--secondary {
+    border-color: var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text);
+}
+
+.button--secondary:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.button--ghost {
+    border-color: transparent;
+    background: transparent;
+    color: var(--color-text-muted);
+}
+
+.button--ghost:hover {
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+}
+
+.button--danger {
+    background: var(--color-danger);
+    color: white;
+}
+
+.button--small {
+    min-height: 36px;
+    padding: 7px 13px;
+    font-size: 0.875rem;
+}
+
+/* ================================
+   5. Page header
+   ================================ */
+
+.page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 30px;
+}
+
+.page-header__eyebrow {
+    margin: 0 0 6px;
+    color: var(--color-primary);
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.page-header h1 {
+    margin: 0;
+    font-size: clamp(2rem, 5vw, 3rem);
+    line-height: 1.1;
+}
+
+.page-header__description {
+    max-width: 620px;
+    margin: 10px 0 0;
+    color: var(--color-text-muted);
+}
+
+/* ================================
+   6. Cards
+   ================================ */
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.card {
+    display: flex;
+    min-height: 220px;
+    flex-direction: column;
+    padding: 24px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-large);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-small);
+    transition:
+        transform 180ms ease,
+        border-color 180ms ease,
+        box-shadow 180ms ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    border-color: #c7d2fe;
+    box-shadow: var(--shadow-medium);
+}
+
+.card__icon {
+    display: grid;
+    width: 46px;
+    height: 46px;
+    margin-bottom: 20px;
+    place-items: center;
+    border-radius: 13px;
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+    font-weight: 800;
+}
+
+.card__title {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.card__title a:hover {
+    color: var(--color-primary);
+}
+
+.card__description {
+    margin: 10px 0 20px;
+    color: var(--color-text-muted);
+}
+
+.card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 18px;
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+}
+
+/* ================================
+   7. Forms
+   ================================ */
+
+.form-card {
+    max-width: 720px;
+    padding: 30px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-large);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-small);
+}
+
+.form-field {
+    margin-bottom: 22px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.form-hint {
+    margin: 6px 0 0;
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+}
+
+.form-control {
+    width: 100%;
+    min-height: 46px;
+    padding: 11px 13px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-small);
+    outline: none;
+    background: white;
+    color: var(--color-text);
+    transition:
+        border-color 150ms ease,
+        box-shadow 150ms ease;
+}
+
+textarea.form-control {
+    resize: vertical;
+}
+
+.form-control:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 4px rgb(99 102 241 / 12%);
+}
+
+.form-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+/* ================================
+   8. Flash và errors
+   ================================ */
+
+.flash {
+    margin-bottom: 24px;
+    padding: 14px 18px;
+    border: 1px solid;
+    border-radius: var(--radius-medium);
+    font-weight: 600;
+}
+
+.flash--notice {
+    border-color: #bbf7d0;
+    background: var(--color-success-light);
+    color: var(--color-success);
+}
+
+.flash--alert {
+    border-color: #fecaca;
+    background: var(--color-danger-light);
+    color: var(--color-danger);
+}
+
+.error-box {
+    margin-bottom: 24px;
+    padding: 16px 20px;
+    border: 1px solid #fecaca;
+    border-radius: var(--radius-medium);
+    background: var(--color-danger-light);
+    color: var(--color-danger);
+}
+
+.error-box ul {
+    margin-bottom: 0;
+}
+
+/* ================================
+   9. Empty state
+   ================================ */
+
+.empty-state {
+    padding: 64px 24px;
+    border: 1px dashed #cbd5e1;
+    border-radius: var(--radius-large);
+    background: rgb(255 255 255 / 60%);
+    text-align: center;
+}
+
+.empty-state__icon {
+    margin-bottom: 12px;
+    font-size: 2.5rem;
+}
+
+.empty-state h2 {
+    margin: 0;
+}
+
+.empty-state p {
+    margin: 8px auto 22px;
+    color: var(--color-text-muted);
+}
+
+/* ================================
+   10. Responsive
+   ================================ */
+
+@media (max-width: 850px) {
+    .card-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .navbar__user {
+        display: none;
+    }
+
+    .navbar__links {
+        gap: 8px;
+    }
+
+    .nav-link {
+        display: none;
+    }
+
+    .main-content {
+        padding-top: 28px;
+    }
+
+    .page-header {
+        flex-direction: column;
+    }
+
+    .card-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-card {
+        padding: 22px;
+    }
+
+    .form-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .form-actions .button {
+        width: 100%;
+    }
+}

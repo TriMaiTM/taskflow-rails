@@ -1,0 +1,31 @@
+<header class="navbar">
+    <div class="container navbar__inner">
+        <%= link_to root_path, class: "brand" do %>
+            <span class="brand_logo">T</span>
+            <span>TaskFlow</span>
+        <% end %>
+
+        <nav class="navbar__links">
+            <% if authenticated? %>
+                <%= link_to "Dự án", projects_path, class: "nav-link" %>
+                <span class="navbar__user">
+                    <%= Current.user.name %>
+                </span>
+
+                <%= button_to "Đăng xuất",
+                    session_path,
+                    method: :delete,
+                    class: "button button--ghost button--small",
+                    data: { turbo_confirm: "Bạn muốn đăng xuất?" } %>
+            <% else %>
+                <%= link_to "Đăng nhập",
+                    new_session_path,
+                    class: "nav-link" %>
+
+                <%= link_to "Bắt đầu",
+                    sign_up_path,
+                    class: "button button-primary button-small" %>
+            <% end %>
+        </nav>
+    </div>
+</header>

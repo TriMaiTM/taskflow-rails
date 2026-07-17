@@ -24,29 +24,13 @@
   </head>
 
   <body>
-    <nav>
-      <%= link_to "TaskFlow", root_path %>
+  <%= render "shared/navbar" %>
 
-      <% if authenticated? %>
-        <%= link_to "Dự án", projects_path %>
-
-      <%= button_to "Đăng xuất",
-        session_path,
-        method: :delete,
-        data: { turbo_confirm: "Bạn muốn đăng xuất?" } %>
-      <% else %>
-        <%= link_to "Đăng nhập", new_session_path %>
-        <%= link_to "Đăng ký", sign_up_path %>
-      <% end %>
-    </nav>
-
-    <% if notice %>
-      <p class="notice"><%= notice %></p>
-    <% end %>
-
-    <% if alert %>
-      <p class="alert"><%= alert %></p>
-    <% end %>
-    <%= yield %>
-  </body>
+  <main class="main-content">
+    <div class="container">
+      <%= render "shared/flash" %>
+      <%= yield %>
+    </div>
+  </main>
+</body>
 </html>
