@@ -1,21 +1,46 @@
-<%= form_with model: project do |form| %>
+<%= form_with model: project, class: "form-card" do |form| %>
   <% if project.errors.any? %>
-    <ul>
-      <% project.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-    </ul>
+    <div class="error-box">
+      <strong>
+        Không thể lưu dự án:
+      </strong>
+
+      <ul>
+        <% project.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
   <% end %>
 
-  <div>
-    <%= form.label :name, "Tên dự án" %>
-    <%= form.text_field :name, required: true %>
+  <div class="form-field">
+    <%= form.label :name, "Tên dự án", class: "form-label" %>
+
+    <%= form.text_field :name,
+      class: "form-control",
+      placeholder: "Ví dụ: Học Ruby on Rails",
+      required: true,
+      autofocus: true %>
+
+    <p class="form-hint">
+      Chọn một tên ngắn gọn, dễ nhận biết.
+    </p>
   </div>
 
-  <div>
-    <%= form.label :description, "Mô tả" %>
-    <%= form.text_area :description, rows: 5 %>
+  <div class="form-field">
+    <%= form.label :description, "Mô tả", class: "form-label" %>
+
+    <%= form.text_area :description,
+      class: "form-control",
+      rows: 6,
+      placeholder: "Mục tiêu của dự án là gì?" %>
   </div>
 
-  <%= form.submit %>
+  <div class="form-actions">
+    <%= form.submit class: "button button--primary" %>
+
+    <%= link_to "Hủy",
+      project.persisted? ? project_path(project) : projects_path,
+      class: "button button--secondary" %>
+  </div>
 <% end %>

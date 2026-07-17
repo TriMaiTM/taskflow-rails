@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   resources :projects do
     resources :tasks do
       patch :toggle, on: :member
-      resources :comments, only: %i[create destroy]
+      resources :comments, only: %i[create destroy] 
     end
   end
 end

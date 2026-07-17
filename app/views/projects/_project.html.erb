@@ -1,0 +1,24 @@
+<article class="card">
+  <div class="card__icon">
+    <%= project.name.first.upcase %>
+  </div>
+
+  <h2 class="card__title">
+    <%= link_to project.name, project %>
+  </h2>
+
+  <p class="card__description">
+    <%= truncate(
+      project.description.presence || "Chưa có mô tả.",
+      length: 110
+    ) %>
+  </p>
+
+  <footer class="card__footer">
+    <span>
+      Cập nhật <%= time_ago_in_words(project.updated_at) %> trước
+    </span>
+
+    <%= link_to "Mở →", project, class: "nav-link" %>
+  </footer>
+</article>
