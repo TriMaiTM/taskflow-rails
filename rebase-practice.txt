@@ -4,3 +4,4 @@ Trang task show:
 - Hiển thị tiêu đề task
 - Hiển thị deadline
 - Hiển thị trạng thái công việc
+- Hiển thị danh sách bình luận
