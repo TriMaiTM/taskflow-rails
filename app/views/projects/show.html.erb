@@ -1,45 +1,191 @@
-<h1><%= @project.name %></h1>
-<p><%= simple_format(@project.description) %></p>
-<p>
-  <%= link_to "Sửa", edit_project_path(@project) %>
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <%= link_to "Dự án", projects_path %>
+  <span>/</span>
+  <span><%= @project.name %></span>
+</nav>
 
-  <%= button_to "Xóa",
+<section class="project-header">
+  <div> 
+
+    <h1><%= @project.name %></h1>
+
+    <p class="project-header__description">
+      <%= @project.description.presence || "Dự án chưa có mô tả." %>
+    </p>
+  </div>
+
+  <div class="project-header__actions">
+    <%= link_to "Chỉnh sửa",
+      edit_project_path(@project),
+      class: "button button--secondary" %>
+
+    <%= link_to "+ Công việc",
+      new_project_task_path(@project),
+      class: "button button--primary" %>
+  </div>
+</section>
+
+<section class="stats-grid">
+  <article class="stat-card">
+    <div class="stat-card__icon stat-card__icon--primary">
+      Σ
+    </div>
+
+    <div>
+      <p class="stat-card__label">Tổng công việc</p>
+      <p class="stat-card__value"><%= @total_tasks %></p>
+    </div>
+  </article>
+
+  <article class="stat-card">
+    <div class="stat-card__icon stat-card__icon--warning">
+      ◷
+    </div>
+
+    <div>
+      <p class="stat-card__label">Đang thực hiện</p>
+      <p class="stat-card__value"><%= @in_progress_tasks %></p>
+    </div>
+  </article>
+
+  <article class="stat-card">
+    <div class="stat-card__icon stat-card__icon--success">
+      ✓
+    </div>
+
+    <div>
+      <p class="stat-card__label">Hoàn thành</p>
+      <p class="stat-card__value"><%= @completed_tasks %></p>
+    </div>
+  </article>
+</section>
+
+<section class="progress-panel">
+  <div class="progress-panel__header">
+    <div>
+      <h2>Tiến độ dự án</h2>
+
+      <p>
+        <%= @completed_tasks %>/<%= @total_tasks %>
+        công việc đã hoàn thành
+      </p>
+    </div>
+
+    <strong class="progress-panel__value">
+      <%= @progress %>%
+    </strong>
+  </div>
+
+  <div
+    class="progress-bar"
+    role="progressbar"
+    aria-valuenow="<%= @progress %>"
+    aria-valuemin="0"
+    aria-valuemax="100"
+  >
+    <div
+      class="progress-bar__value"
+      style="width: <%= @progress %>%"
+    ></div>
+  </div>
+</section>
+
+<section class="tasks-section">
+  <div class="section-heading">
+    <div>
+      <p class="page-header__eyebrow">Tasks</p>
+      <h2>Công việc</h2>
+    </div>
+  </div>
+
+  <%= form_with url: project_path(@project),
+    method: :get,
+    class: "filter-bar",
+    data: { controller: "autosubmit" } do |form| %>
+
+    <div class="filter-bar__search">
+      <%= form.search_field :q,
+        value: params[:q],
+        class: "form-control",
+        placeholder: "Tìm công việc..." %>
+    </div>
+
+    <div class="filter-bar__status">
+      <%= form.select :status,
+        [
+          ["Tất cả trạng thái", ""],
+          ["Cần làm", "todo"],
+          ["Đang thực hiện", "in_progress"],
+          ["Hoàn thành", "done"]
+        ],
+        { selected: params[:status] },
+        {
+          class: "form-control",
+          data: {
+            action: "change->autosubmit#submit"
+          }
+        } %>
+    </div>
+
+    <%= form.submit "Tìm",
+      class: "button button--secondary" %>
+
+    <% if params[:q].present? || params[:status].present? %>
+      <%= link_to "Xóa bộ lọc",
+        project_path(@project),
+        class: "button button--ghost" %>
+    <% end %>
+  <% end %>
+
+  <% if @tasks.any? %>
+    <div class="task-list">
+      <%= render partial: "tasks/task",
+        collection: @tasks,
+        locals: { project: @project } %>
+    </div>
+  <% else %>
+    <section class="empty-state">
+      <div class="empty-state__icon">✓</div>
+
+      <% if params[:q].present? || params[:status].present? %>
+        <h2>Không tìm thấy công việc</h2>
+
+        <p>
+          Thử thay đổi từ khóa hoặc xóa bộ lọc.
+        </p>
+
+        <%= link_to "Xóa bộ lọc",
+          project_path(@project),
+          class: "button button--secondary" %>
+      <% else %>
+        <h2>Chưa có công việc</h2>
+
+        <p>
+          Tạo công việc đầu tiên để bắt đầu theo dõi dự án.
+        </p>
+
+        <%= link_to "Tạo công việc",
+          new_project_task_path(@project),
+          class: "button button--primary" %>
+      <% end %>
+    </section>
+  <% end %>
+</section>
+
+<section class="danger-zone">
+  <div>
+    <h2>Xóa dự án</h2>
+
+    <p>
+      Dự án và toàn bộ công việc bên trong sẽ bị xóa vĩnh viễn.
+    </p>
+  </div>
+
+  <%= button_to "Xóa dự án",
     @project,
     method: :delete,
-    data: { turbo_confirm: "Xóa dự án này?" } %>
-</p>
-<%= link_to "Danh sách dự án", projects_path %>
-<hr>
-<h2>Công việc</h2>
-<p>
-  <%= link_to "Tạo công việc", new_project_task_path(@project) %>
-</p>
-<%= form_with url: project_path(@project), method: :get, data: { controller: "autosubmit" } do |form| %>
-  <%= form.search_field :q,
-    value: params[:q],
-    placeholder: "Tìm công việc..." %>
-  <%= form.select :status,
-    [["Tất cả", ""]] +
-      Task.statuses.keys.map { |status| [status.humanize, status] },
-    { selected: params[:status] },
-    { data: { action: "change->autosubmit#submit" } }%>
-  <%= form.submit "Lọc" %>
-<% end %>
-<% @tasks.each do |task| %>
-  <article>
-    <h3>
-      <%= link_to task.title, [@project, task] %>
-    </h3>
-    <p>
-      <%= task.status.humanize %>
-      <% if task.overdue? %>
-        — Quá hạn
-      <% end %>
-    </p>
-    <%= button_to(
-      task.done? ? "Mở lại" : "Hoàn thành",
-      toggle_project_task_path(@project, task),
-      method: :patch
-    ) %>
-  </article>
-<% end %>
+    class: "button button--danger",
+    data: {
+      turbo_confirm: "Bạn chắc chắn muốn xóa dự án này?"
+    } %>
+</section>

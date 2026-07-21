@@ -1,0 +1,57 @@
+<article class="task-card task-card--<%= task.status %>">
+  <div class="task-card__main">
+    <div class="task-card__header">
+      <span class="badge <%= task_status_class(task) %>">
+        <%= task_status_label(task) %>
+      </span>
+
+      <span class="task-meta <%= task_due_class(task) %>">
+        <%= task_due_label(task) %>
+      </span>
+    </div>
+
+    <h3 class="task-card__title">
+      <%= link_to task.title, [project, task] %>
+    </h3>
+
+    <p class="task-card__description">
+      <%= truncate(
+        task.description.presence || "Chưa có mô tả.",
+        length: 150
+      ) %>
+    </p>
+
+    <div class="task-card__meta">
+      <span>
+        Tạo <%= time_ago_in_words(task.created_at) %> trước
+      </span>
+
+      <% if task.files.attached? %>
+        <span>
+          📎 <%= task.files.count %> tệp
+        </span>
+      <% end %>
+
+      <% if task.comments.any? %>
+        <span>
+          💬 <%= task.comments.size %> bình luận
+        </span>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="task-card__actions">
+    <%= button_to(
+      task.done? ? "Mở lại" : "Hoàn thành",
+      toggle_project_task_path(project, task),
+      method: :patch,
+      class: task.done? ?
+        "button button--secondary button--small" :
+        "button button--success button--small"
+    ) %>
+
+    <%= link_to "Sửa",
+      edit_project_task_path(project, task),
+      class: "button button--ghost button--small" %>
+  </div>
+</article>

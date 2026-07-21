@@ -6,14 +6,32 @@ class ProjectsController < ApplicationController
     end
 
     def show
-        @tasks = @project.tasks.recent_first
+        all_tasks = @project.tasks  
+
+        @total_tasks = all_tasks.count
+        @completed_tasks = all_tasks.done.count
+        @in_progress_tasks = all_tasks.in_progress.count
+
+        @progress = if @total_tasks.zero?
+            0
+        else
+            ((@completed_tasks.to_f / @total_tasks) * 100).round
+        end
+
+        @tasks = all_tasks
+            .includes(:comments)
+            .with_attached_files
+            .order(created_at: :desc)
         if Task.statuses.key?(params[:status])
             @tasks = @tasks.where(status: params[:status])
         end
 
         if params[:q].present?
             keyword = Task.sanitize_sql_like(params[:q].downcase)
-            @tasks = @tasks.where("LOWER(title) LIKE ?", "%#{keyword}%")
+            @tasks = @tasks.where(
+                "LOWER(title) LIKE ?",
+                "%#{keyword}%"
+            )
         end
     end
 
