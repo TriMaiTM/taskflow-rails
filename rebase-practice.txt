@@ -3,3 +3,4 @@ TASKFLOW PROJECT
 Trang task show:
 - Hiển thị tiêu đề task
 - Hiển thị deadline
+- Hiển thị trạng thái công việc
